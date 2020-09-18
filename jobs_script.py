@@ -8,19 +8,19 @@ def format_jobs(x):
 	"""
 
 	#formatted_str must contain name
-	formatted_str = f"🤖 {x[3]}"
+	formatted_str = f"🤖 {x[3]} - {x[4]}"
 	#location
-	if str(x[4]) != "nan":
-		formatted_str += f" - {x[4]}"
+	if str(x[5]) != "nan" and str(x[5]) != "":
+		formatted_str += f" - {x[5]}"
 	#deadline
-	if str(x[5]) != "nan":
-		formatted_str += f" | {x[5]}"
+	if str(x[6]) != "nan" and str(x[6]) != "":
+		formatted_str += f" | {x[6]}"
 	#url - using link shortener
 	if str(x[2]) != "nan":
 		formatted_str += f"\nhttps://link.kszk.eu/jobs{x[0]}"
 	#description 
-	if str(x[6]) != "nan":
-		formatted_str += f"\n{x[6]}"
+	if str(x[7]) != "nan" and str(x[7]) != "":
+		formatted_str += f"\n{x[7]}"
 	return formatted_str
 
 def format_events(x):
