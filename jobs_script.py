@@ -41,7 +41,7 @@ class EventFormatter:
         Inputs: Takes in rows of the EVENTS Database
         Outputs: Produces a human readable formatting of each job posting
         """
-        formatted_str = events_emoji_map.get(x[3], u"💥") #emoji
+        formatted_str = self.events_emoji_map.get(x[3], u"💥") #emoji
         formatted_str += format_field("", x[4]) #organisation
         formatted_str += format_field(" - ", x[5]) #title
         formatted_str += format_field(" - ", x[6]) #date start
@@ -55,15 +55,3 @@ class EventFormatter:
         
         return formatted_str
 
-if __name__ == '__main__':
-    #test for events
-    events_test_df = pd.read_csv("test_data/Opportunities post - EVENTS.csv")
-    events_test_df = events_test_df[~events_test_df['ID'].isna()]
-    events_test_df['ID']= events_test_df['ID'].astype(int)
-    print("\n\n".join([format_events(x) for x in events_test_df.values]))
-
-    #test for jobs
-    jobs_test_df = pd.read_csv("test_data/Opportunities post - JOBS.csv")
-    jobs_test_df = jobs_test_df[~jobs_test_df['ID'].isna()]
-    jobs_test_df['ID']= jobs_test_df['ID'].astype(int)
-    print("\n\n".join([format_jobs(x) for x in jobs_test_df.values]))
