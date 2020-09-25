@@ -1,5 +1,13 @@
 import numpy as np
 import pandas as pd
+import time
+from time import sleep
+from datetime import datetime
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 def set_header_from_first_row(df):
   df2 = df.copy()
@@ -44,14 +52,65 @@ class EventFormatter:
         formatted_str = self.events_emoji_map.get(x[3], u"💥") #emoji
         formatted_str += format_field("", x[4]) #organisation
         formatted_str += format_field(" - ", x[5]) #title
+        
         formatted_str += format_field(" - ", x[6]) #date start
-        if x[6][:14] == x[7][:14]:
-            formatted_str += format_field("-", x[7][15:]) #date end
+        formatted_str += format_field(" ", x[7]) #time start
+        if x[6] != x[8]:
+            formatted_str += format_field("-", x[8]) #date end
+            formatted_str += format_field(" ", x[9]) #time end
         else:
-            formatted_str += format_field("-", x[7])
-        formatted_str += format_field("\n",x[8]) #description
-        formatted_str += format_field("\nNB: ",x[9]) #notes
+            formatted_str += format_field("-", x[9]) #time end
+        
+        formatted_str += format_field("\n",x[10]) #description
+        formatted_str += format_field("\nNB: ",x[11]) #notes
         formatted_str += format_field("\nhttps://link.kszk.eu/events", x[0])
         
         return formatted_str
+
+
+def auto_add(config : dict, urls : list, prepend: str):
+    assert("username" in config)
+    assert("password" in config)
+
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    # open it, go to a website, and get results
+    driver = webdriver.Chrome('chromedriver',options=options)
+    driver.get("https://link.kszk.eu/admin/")
+    
+
+
+    try:
+        element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "username")))
+        element.clear()
+        element.send_keys(config["username"])
+    except:
+        print("Failed to put username")
+    try:
+        element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "password")))
+        element.clear()
+        element.send_keys(config["password"])
+        element.send_keys(Keys.RETURN)
+    except:
+        print("Failed to put password")
+
+    for url in urls:
+        try:
+            element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "add-url")))
+            element.clear()
+            element.send_keys(url[0])
+        except:
+            print(f"Failed to put url: {url[0]}")
+        try:
+            element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "add-keyword")))
+            element.clear()
+            element.send_keys(prepend + url[1])
+            element.send_keys(Keys.RETURN)
+        except:
+            print(f"Failed to put shortened name: {url[1]}")
+    driver.quit()
+    return
+
 

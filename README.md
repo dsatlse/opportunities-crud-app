@@ -31,6 +31,8 @@ The next step currently is a link shortener service, which will allow us to log 
 
 ![link shortener](docs/link_shortener.png)
 
+```auto_add``` in ```jobs.script.py``` will populate the link shortener service with the links to be added
+
 ## Development
 
 Currently the 'front-end' is a colab notebook: https://colab.research.google.com/drive/10wYKGJU_LMGbf2qCVHQjPQ-lr2Q0rUUC
