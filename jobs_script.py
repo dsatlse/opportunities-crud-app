@@ -38,16 +38,32 @@ class JobFormatter:
         
         return formatted_str
 
+    @staticmethod
+    def format_jobs_markdown(x):
+        """
+        Inputs: Takes in rows of the JOBS Database
+        Outputs: Produces a markdown table each job posting
+        """
+        formatted_str = ""
+        formatted_str += f"| 🤖 {x[3]} {format_field(' - ', x[4])} | " #organisation
+        formatted_str += f"{format_field('', x[5])} | " #level
+        #date and time
+        formatted_str += f" {format_field('', x[6])} | " #location
+        formatted_str += f" {format_field('', x[8])} | " #description
+        formatted_str += f" {format_field('https://link.kszk.eu/jobs', x[0])} |" #url
+        
+        return formatted_str
+
 
 class EventFormatter:
     def __init__(self):
-        self.events_emoji_map = {"WORKSHOP":u"💥", "TALK":u"💥", "HACKATHON": u"📈"}
+        self.events_emoji_map = {"WORKSHOP":u"💥", "TALK":u"💥", "HACKATHON/CHALLENGE": u"📈"}
         return
 
     def format_events(self, x):
         """
         Inputs: Takes in rows of the EVENTS Database
-        Outputs: Produces a human readable formatting of each job posting
+        Outputs: Produces a human readable formatting of each event posting
         """
         formatted_str = self.events_emoji_map.get(x[3], u"💥") #emoji
         formatted_str += format_field("", x[4]) #organisation
@@ -67,21 +83,39 @@ class EventFormatter:
         
         return formatted_str
 
+    def format_events_markdown(self, x):
+        """
+        Inputs: Takes in rows of the EVENTS Database
+        Outputs: Produces a markdown table for the event posting
+        """
+        formatted_str = ""
+        formatted_str += f"|{self.events_emoji_map.get(x[3], u'💥')} {format_field('', x[4])}{format_field(' - ', x[5])} | " #organisation - title
+        formatted_str += f"{format_field('', x[3])} | " #type
+        #date and time
+        formatted_str += f"{format_field('', x[6])}{format_field(' - ', x[7])}"
+        if x[6] != x[8]:
+            formatted_str += f"{format_field('-', x[8])}{format_field(' ', x[9])} |"
+        else:
+            formatted_str += f"{format_field('-', x[9])} | "
+        formatted_str += f"{format_field('https://link.kszk.eu/events', x[0])} |" #url
+        formatted_str += f"{format_field('',x[10])} {format_field('',x[11])} | " #description - notes
+        
+        return formatted_str
+        
 
 def auto_add(config : dict, urls : list, prepend: str):
     assert("username" in config)
     assert("password" in config)
 
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
+    # options.add_argument('--headless')
+    # options.add_argument('--no-sandbox')
+    # options.add_argument('--disable-dev-shm-usage')
     # open it, go to a website, and get results
     driver = webdriver.Chrome('chromedriver',options=options)
     driver.get("https://link.kszk.eu/admin/")
     
-
-
+    #login into portal
     try:
         element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "username")))
         element.clear()
@@ -104,13 +138,13 @@ def auto_add(config : dict, urls : list, prepend: str):
         except:
             print(f"Failed to put url: {url[0]}")
         try:
-            element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "add-keyword")))
-            element.clear()
-            element.send_keys(prepend + url[1])
-            element.send_keys(Keys.RETURN)
+            element2 = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "add-keyword")))
+            element2.clear()
+            element2.send_keys(prepend + url[1])
+            element2.send_keys(Keys.RETURN)
         except:
             print(f"Failed to put shortened name: {url[1]}")
+        #timeout between urls
+        time.sleep(1.5)
     driver.quit()
     return
-
-
