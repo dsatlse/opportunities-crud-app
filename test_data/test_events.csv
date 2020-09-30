@@ -1,0 +1,8 @@
+ID,DATE_ADDED,URL,TYPE,ORGANISATION,NAME,EVENT_START,TIME_START,EVENT_END,TIME_END,DESCRIPTION,NOTES,NEWSLETTER
+26,25/09/2020,https://www.eventbrite.co.uk/e/code-your-way-out-of-a-paper-bag-using-genetic-algorithms-tickets-122579607907,TALK,Women in Tech York,Code your way out of a paper bag using Genetic Algorithms,08/10/2020,18:30:00,08/10/2020,20:30:00,,"An introduction to genetic algorithms which are useful machine 
+learning/evolutionary computing technique for solving problems that take
+ too long to brute force",
+27,29/09/2020,https://careers.lse.ac.uk/students/events/Detail/667792/external-event-flow-traders-tr,TALK,Flow Traders,Trading Challenge,06/10/2020,18:30,06/10/2020,20:00,,,
+28,29/09/2020,https://careers.lse.ac.uk/students/events/Detail/666895/company-presentation-with-opti,TALK,Optiver,Company Presentation,06/10/2020,17:00,06/10/2020,19:00,,,
+29,29/09/2020,https://www.mitenergyhack.org/,HACKATHON/CHALLENGE,MIT,Energy Hack,,,,,,,
+30,29/09/2020,https://developercircles2020.devpost.com/,HACKATHON/CHALLENGE,Facebook,Developer Circles Community Challenge,,,,,,"Challenge to make a tutorial on a Facebook technology - Pytorch, React, Docusaurus etc.",

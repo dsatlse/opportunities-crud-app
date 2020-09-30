@@ -16,8 +16,8 @@ def set_header_from_first_row(df):
   return df2
 
 def format_field(prepend: str, x : str):
-    x = ' '.join(x.split()) #strip whitespace
-    if str(x) != "nan" and str(x) != "":  #if not empty add
+    x = ' '.join(str(x).split()) #strip whitespace and coerce to string
+    if x != "nan" and x != "":  #if not empty add
         return prepend + x
     return ""
 
