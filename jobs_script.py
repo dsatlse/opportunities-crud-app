@@ -108,9 +108,9 @@ def auto_add(config : dict, urls : list, prepend: str):
     assert("password" in config)
 
     options = webdriver.ChromeOptions()
-    # options.add_argument('--headless')
-    # options.add_argument('--no-sandbox')
-    # options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
     # open it, go to a website, and get results
     driver = webdriver.Chrome('chromedriver',options=options)
     driver.get("https://link.kszk.eu/admin/")
