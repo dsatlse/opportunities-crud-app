@@ -145,6 +145,6 @@ def auto_add(config : dict, urls : list, prepend: str):
         except:
             print(f"Failed to put shortened name: {url[1]}")
         #timeout between urls
-        time.sleep(1.5)
+        time.sleep(1.8)
     driver.quit()
     return
