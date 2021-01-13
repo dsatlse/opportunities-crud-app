@@ -27,6 +27,8 @@ The ```jobs_script.py``` produces formatted output from the table (ideally it sh
 
 ![formatted output](docs/format_output.png)
 
+## Deprecated
+
 The next step currently is a link shortener service which is hosted on a seperate thing. It allow us to log number of clicks, which will be useful for finding out what members are interested in. Every link needs to be added manually, with the user specifying the shortened url (currently something like "events1", but should really be a hash like "abc123"). There is ```auto_add```
 
 ![link shortener](docs/link_shortener.gif)

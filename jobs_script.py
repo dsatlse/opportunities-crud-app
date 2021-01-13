@@ -3,11 +3,7 @@ import pandas as pd
 import time
 from time import sleep
 from datetime import datetime
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
+
 
 def set_header_from_first_row(df):
   df2 = df.copy()
@@ -15,7 +11,7 @@ def set_header_from_first_row(df):
   df2 = df2.iloc[1:]
   return df2
 
-def format_field(prepend: str, x : str):
+def format_field(prepend: str, x: str):
     x = ' '.join(str(x).split()) #strip whitespace and coerce to string
     if x != "nan" and x != "":  #if not empty add
         return prepend + x
@@ -34,7 +30,7 @@ class JobFormatter:
         formatted_str += format_field(" - ", x[6]) #location
         formatted_str += format_field("- Deadline: ",x[7]) #deadline
         formatted_str += format_field("\n",x[8]) #description
-        formatted_str += format_field("\nhttps://link.kszk.eu/jobs", x[0])
+        formatted_str += format_field("\n", x[2])
         
         return formatted_str
 
@@ -50,7 +46,7 @@ class JobFormatter:
         #date and time
         formatted_str += f" {format_field('', x[6])} | " #location
         formatted_str += f" {format_field('', x[8])} | " #description
-        formatted_str += f" {format_field('https://link.kszk.eu/jobs', x[0])} |" #url
+        formatted_str += f" {format_field('', x[2])} |" #url
         
         return formatted_str
 
@@ -79,7 +75,7 @@ class EventFormatter:
         
         formatted_str += format_field("\n",x[10]) #description
         formatted_str += format_field("\nNB: ",x[11]) #notes
-        formatted_str += format_field("\nhttps://link.kszk.eu/events", x[0])
+        formatted_str += format_field("\n", x[2])
         
         return formatted_str
 
@@ -97,54 +93,7 @@ class EventFormatter:
             formatted_str += f"{format_field('-', x[8])}{format_field(' ', x[9])} |"
         else:
             formatted_str += f"{format_field('-', x[9])} | "
-        formatted_str += f"{format_field('https://link.kszk.eu/events', x[0])} |" #url
+        formatted_str += f"{format_field('', x[2])} |" #url
         formatted_str += f"{format_field('',x[10])} {format_field('',x[11])} | " #description - notes
         
         return formatted_str
-        
-
-def auto_add(config : dict, urls : list, prepend: str):
-    assert("username" in config)
-    assert("password" in config)
-
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    # open it, go to a website, and get results
-    driver = webdriver.Chrome('chromedriver',options=options)
-    driver.get("https://link.kszk.eu/admin/")
-    
-    #login into portal
-    try:
-        element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "username")))
-        element.clear()
-        element.send_keys(config["username"])
-    except:
-        print("Failed to put username")
-    try:
-        element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "password")))
-        element.clear()
-        element.send_keys(config["password"])
-        element.send_keys(Keys.RETURN)
-    except:
-        print("Failed to put password")
-
-    for url in urls:
-        try:
-            element = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "add-url")))
-            element.clear()
-            element.send_keys(url[0])
-        except:
-            print(f"Failed to put url: {url[0]}")
-        try:
-            element2 = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.ID, "add-keyword")))
-            element2.clear()
-            element2.send_keys(prepend + url[1])
-            element2.send_keys(Keys.RETURN)
-        except:
-            print(f"Failed to put shortened name: {url[1]}")
-        #timeout between urls
-        time.sleep(1.8)
-    driver.quit()
-    return
